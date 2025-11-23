@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import PalateInteractions from "./PalateInteractions";
 import PalateWebContent from "./PalateWebContent";
 
-function ColorPalate({ id, colorObj, updateLock, showToast }) {
+function ColorPalate({ id, colorObj, updateLock, showToast,setRandomColors }) {
   const [showInteraction, setShowInteraction] = useState(false);
   const [lockedColor, setLockedColor] = useState(false);
 
@@ -34,11 +34,11 @@ function ColorPalate({ id, colorObj, updateLock, showToast }) {
       style={style}
       onMouseEnter={() => setShowInteraction(true)}
       onMouseLeave={() => setShowInteraction(false)}
-      className="flex-1 h-full flex items-end justify-center hover:flex-[1.2] transition-[flex] duration-300 ease-in-out"
+      className="flex-1 h-full flex items-start justify-center hover:flex-[1.2] transition-[flex] duration-300 ease-in-out"
     >
-      <PalateWebContent />  
       {(showInteraction || isDragging) && (
         <PalateInteractions
+        setRandomColors={setRandomColors}
           color={colorObj.value}
           locked={colorObj.locked}
           onLockToggle={updateLock}

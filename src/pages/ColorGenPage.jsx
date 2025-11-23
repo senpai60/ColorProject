@@ -83,6 +83,7 @@ function ColorGenPage() {
         >
           {randomColors.map((color,index) => (
             <ColorPalate
+            setRandomColors={setRandomColors}
               key={color.id} // Use ID as key, not value
               id={color.id}  // Pass ID to component
               colorObj={color}
