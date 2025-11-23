@@ -1,16 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import 'tailwindcss';
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
-
 /* 2. Variables define kar le easy use ke liye */
-.font-sans {
-    font-family: 'Outfit', sans-serif;
+body {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
 }
 
 .font-mono {
-
     font-family: 'JetBrains Mono', monospace;
-    ;
+}
+
+:root {
+    --test: #d3e9c3;
 }
 
 @keyframes slide-fade {

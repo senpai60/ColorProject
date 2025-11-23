@@ -27,7 +27,7 @@ const generatedColors = [
   "rgb(255, 223, 211)",
 ];
 
-function ColorGenPage() {
+function ColorGenPage({ algoMode }) {
   const [randomColors, setRandomColors] = useState([]);
 
   const [toastColor, setToastColor] = useState(null);
@@ -55,12 +55,28 @@ function ColorGenPage() {
   };
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === "Space") {
+        setRandomColors((prev) =>
+          prev.map((c) =>
+            c.locked ? c : { ...c, value: randomColorGenerator(algoMode) }
+          )
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setRandomColors, algoMode]);
+
+  useEffect(() => {
     const fetchRandomColors = () => {
       const colors = [];
       for (let i = 0; i < 5; i++) {
         colors.push({
           id: `palette-${i}-${Date.now()}`,
-          value: randomColorGenerator(),
+          value: randomColorGenerator(algoMode),
           locked: false,
         });
       }
@@ -68,7 +84,7 @@ function ColorGenPage() {
     };
 
     fetchRandomColors();
-  }, []);
+  }, [algoMode]);
 
   const handleColorUpdate = (index, newColor) => {
     setRandomColors((prev) =>
@@ -77,7 +93,7 @@ function ColorGenPage() {
   };
 
   return (
-    <section className="w-full h-full flex overflow-hidden">
+    <section className="w-full flex-1 flex overflow-hidden">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -87,11 +103,12 @@ function ColorGenPage() {
           items={randomColors}
           strategy={horizontalListSortingStrategy}
         >
-          {randomColors.map((color,index) => (
+          {randomColors.map((color, index) => (
             <ColorPalate
-            setRandomColors={setRandomColors}
+              algoMode={algoMode}
+              setRandomColors={setRandomColors}
               key={color.id} // Use ID as key, not value
-              id={color.id}  // Pass ID to component
+              id={color.id} // Pass ID to component
               colorObj={color}
               showToast={showToast}
               onUpdateColor={(newColor) => handleColorUpdate(index, newColor)}
@@ -107,7 +124,7 @@ function ColorGenPage() {
         </SortableContext>
       </DndContext>
 
-      <GenerateButton setRandomColors={setRandomColors} />
+      {/* <GenerateButton setRandomColors={setRandomColors} /> */}
 
       {toastColor && (
         <Toast color={toastColor} onClose={() => setToastColor(null)} />
