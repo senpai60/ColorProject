@@ -70,6 +70,12 @@ function ColorGenPage() {
     fetchRandomColors();
   }, []);
 
+  const handleColorUpdate = (index, newColor) => {
+    setRandomColors((prev) =>
+      prev.map((c, i) => (i === index ? { ...c, value: newColor } : c))
+    );
+  };
+
   return (
     <section className="w-full h-full flex overflow-hidden">
       <DndContext
@@ -88,6 +94,7 @@ function ColorGenPage() {
               id={color.id}  // Pass ID to component
               colorObj={color}
               showToast={showToast}
+              onUpdateColor={(newColor) => handleColorUpdate(index, newColor)}
               updateLock={() => {
                 setRandomColors((prev) =>
                   prev.map((c) =>

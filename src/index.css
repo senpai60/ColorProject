@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* 2. Variables define kar le easy use ke liye */
+.font-sans {
+    font-family: 'Outfit', sans-serif;
+}
+
+.font-mono {
+
+    font-family: 'JetBrains Mono', monospace;
+    ;
+}
+
 @keyframes slide-fade {
     0% {
         opacity: 0;
