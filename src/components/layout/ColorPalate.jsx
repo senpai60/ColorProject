@@ -34,7 +34,7 @@ function ColorPalate({ id, colorObj, updateLock, showToast,setRandomColors }) {
       style={style}
       onMouseEnter={() => setShowInteraction(true)}
       onMouseLeave={() => setShowInteraction(false)}
-      className="flex-1 h-full flex items-start justify-center hover:flex-[1.2] transition-[flex] duration-300 ease-in-out"
+      className="flex-1 h-full flex items-center justify-between hover:flex-[1.2]d transition-[flex] duration-300 ease-in-out"
     >
       {(showInteraction || isDragging) && (
         <PalateInteractions
