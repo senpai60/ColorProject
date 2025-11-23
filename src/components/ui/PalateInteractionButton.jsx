@@ -1,7 +1,8 @@
 
-function PalateInteractionButton({children,onClick}) {
+function PalateInteractionButton({children,onClick,...props}) {
   return (
     <button
+    {...props}
     onClick={onClick}
         color="black"
         className="

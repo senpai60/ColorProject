@@ -4,6 +4,21 @@ import { randomColorGenerator } from "../utils/randomColorGenerator";
 import ColorPalate from "../components/layout/ColorPalate";
 import Toast from "../components/ui/Toast";
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
 const generatedColors = [
   "rgb(224, 187, 228)",
   "rgb(149, 125, 173)",
@@ -21,11 +36,30 @@ function ColorGenPage() {
     setToastColor(copiedColor);
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (e) => {
+    const { active, over } = e;
+    if (active.id !== over.id) {
+      setRandomColors((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchRandomColors = () => {
       const colors = [];
       for (let i = 0; i < 5; i++) {
         colors.push({
+          id: `palette-${i}-${Date.now()}`,
           value: randomColorGenerator(),
           locked: false,
         });
@@ -37,23 +71,36 @@ function ColorGenPage() {
   }, []);
 
   return (
-    <section className="w-full h-full flex">
+    <section className="w-full h-full flex overflow-hidden">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={randomColors}
+          strategy={horizontalListSortingStrategy}
+        >
+          {randomColors.map((color,index) => (
+            <ColorPalate
+              key={color.id} // Use ID as key, not value
+              id={color.id}  // Pass ID to component
+              colorObj={color}
+              showToast={showToast}
+              updateLock={() => {
+                setRandomColors((prev) =>
+                  prev.map((c) =>
+                    c.id === color.id ? { ...c, locked: !c.locked } : c
+                  )
+                );
+              }}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
+
       <GenerateButton setRandomColors={setRandomColors} />
 
-      {randomColors.map((color, index) => (
-        <ColorPalate
-          key={color.value}
-          colorObj={color}
-          showToast={showToast}
-          updateLock={() => {
-            setRandomColors((prev) =>
-              prev.map((c, i) =>
-                i === index ? { ...c, locked: !c.locked } : c
-              )
-            );
-          }}
-        />
-      ))}
       {toastColor && (
         <Toast color={toastColor} onClose={() => setToastColor(null)} />
       )}
