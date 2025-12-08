@@ -2,7 +2,7 @@ import { useContext, createContext, useState } from "react";
 
 const ColorContext = createContext(null);
 
-const ColorProvider = ({ children }) => {
+export const ColorProvider = ({ children }) => {
   const [randomColors, setRandomColors] = useState([]);
   const [algoMode, setAlgoMode] = useState("combinational");
 
@@ -13,10 +13,10 @@ const ColorProvider = ({ children }) => {
   };
 
   const handleAlgoChange = (e) => {
-    console.log(e.target.value);
-
     setAlgoMode(e.target.value);
   };
+
+
 
   const value = {
     randomColors,
